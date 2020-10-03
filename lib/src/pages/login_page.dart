@@ -7,11 +7,106 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          _createBackground(context)
+          _createBackground(context),
+          _loginForm(context)
         ],
       ),
     );
   }
+
+  Widget _loginForm(BuildContext context) {
+
+    final size = MediaQuery.of(context).size;
+
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+
+          SafeArea(
+            child: Container(height: 180.0),
+          ),
+
+          Container(
+            width: size.width * 0.85,
+            margin: EdgeInsets.symmetric(vertical: 30.0),
+            padding: EdgeInsets.symmetric(vertical: 50.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5.0),
+              boxShadow: <BoxShadow> [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 3.0,
+                  offset: Offset(0.0, 3.0),
+                  spreadRadius: 2.0
+                )
+              ]
+            ),
+            child: Column(
+              children: <Widget>[
+                Text('Log In', style: TextStyle(fontSize: 20.0)),
+                SizedBox(height: 60.0),
+                _createEmailInput(),
+                SizedBox(height: 30.0),
+                _createPasswordInput(),
+                SizedBox(height: 30.0),
+                _createButton()
+              ],
+            ),
+          ),
+
+          Text('Forgot password?'),
+          SizedBox(height: 100.0)
+
+        ],
+      ),
+    );
+  }
+
+  Widget _createEmailInput() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextField(
+        keyboardType: TextInputType.emailAddress,
+        decoration: InputDecoration(
+          icon: Icon(Icons.alternate_email, color: Colors.deepPurple),
+          hintText: 'example@email.com',
+          labelText: 'Email adress'
+        ),
+      ),
+    );
+  }
+
+  Widget _createPasswordInput() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextField(
+        obscureText: true,
+        decoration: InputDecoration(
+          icon: Icon(Icons.lock_outline, color: Colors.deepPurple),
+          labelText: 'Password'
+        ),
+      ),
+    );
+  }
+
+  Widget _createButton() {
+    return RaisedButton(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+        child: Text('Accept'),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0)
+      ),
+      elevation: 0.0,
+      color: Colors.deepPurple,
+      textColor: Colors.white,
+      onPressed: () {}
+    );
+  }
+
+
 
   Widget _createBackground(BuildContext context) {
 
@@ -40,7 +135,7 @@ class LoginPage extends StatelessWidget {
     );
 
     final headerIconText = Container(
-      padding: EdgeInsets.only(top: 70),
+      padding: EdgeInsets.only(top: 70.0),
       child: Column(
         children: <Widget>[
           Icon(Icons.person_pin_circle, color: Colors.white, size: 100.0),
