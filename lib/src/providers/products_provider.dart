@@ -38,4 +38,12 @@ class ProductsProvider {
     return products;
   }
 
+  Future<int> deleteProduct(String id) async {
+    final String urlProduct = '$_urlFirebase/products/$id.json';
+    final response = await http.delete(urlProduct);
+
+    print(response.body);
+    return 1;
+  }
+
 }
