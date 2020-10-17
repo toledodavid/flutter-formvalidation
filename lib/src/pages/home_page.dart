@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:formvalidation/src/bloc/provider.dart';
+import 'package:formvalidation/src/models/product_model.dart';
+import 'package:formvalidation/src/providers/products_provider.dart';
 
 class HomePage extends StatelessWidget {
+
+  final productsProvider = new ProductsProvider();
+
   @override
   Widget build(BuildContext context) {
 
@@ -11,8 +16,23 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home page')
       ),
-      body: Container(),
+      body:_createProductsList(),
       floatingActionButton: _createFloatingButton(context),
+    );
+  }
+
+  Widget _createProductsList() {
+    return FutureBuilder(
+      future: productsProvider.getProducts(),
+      builder: (BuildContext context, AsyncSnapshot<List<ProductModel>> snapshot) {
+        if (snapshot.hasData) {
+          return Container();
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      }
     );
   }
 

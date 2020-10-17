@@ -20,4 +20,22 @@ class ProductsProvider {
 
   }
 
+  Future<List<ProductModel>> getProducts() async {
+    final String urlProducts = '$_urlFirebase/products.json';
+    final response = await http.get(urlProducts);
+
+    final Map<String, dynamic> decodedData = json.decode(response.body);
+    final List<ProductModel> products = new List();
+
+    if (decodedData == null) return [];
+    
+    decodedData.forEach((idProduct, infoProduct) {
+      final productTemp = ProductModel.fromJson(infoProduct);
+      productTemp.id = idProduct;
+      products.add(productTemp);
+    });
+
+    return products;
+  }
+
 }
