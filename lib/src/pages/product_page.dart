@@ -1,4 +1,6 @@
 //import 'dart:io';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -41,7 +43,7 @@ class _ProductPageState extends State<ProductPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.photo_size_select_actual),
-            onPressed: _selectPhoto
+            onPressed: _selectImage
           ),
           IconButton(
             icon: Icon(Icons.camera_alt),
@@ -175,18 +177,34 @@ class _ProductPageState extends State<ProductPage> {
     if (product.photoUrl != null) {
       return Container();
     } else {
-      return Image(
-        image: AssetImage(photo?.path ?? 'assets/no-image.png'),
-        height: 300.0,
-        fit: BoxFit.cover,
-      );
+
+      if (photo != null) {
+        return Image.file(
+          File(photo.path),
+          height: 300.0,
+          fit: BoxFit.cover,
+        );
+      } else {
+        return Image(
+          image: AssetImage('assets/no-image.png'),
+          height: 300.0,
+          fit: BoxFit.cover,
+        );
+      }
     }
   }
 
-  _selectPhoto() async {
+  _selectImage() {
+    _imagePicker(ImageSource.gallery);
+  }
+
+  _takePhoto() {
+    _imagePicker(ImageSource.camera);
+  }
+
+  _imagePicker(ImageSource type) async {
     final _picker = ImagePicker();
-    final pickedImage = await _picker.getImage(source: ImageSource.gallery);
-    //photo = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    final pickedImage = await _picker.getImage(source: type);
 
     // Catch error when user cancel selection of image
     try {
@@ -201,9 +219,5 @@ class _ProductPageState extends State<ProductPage> {
     }
  
     setState(() {});
-  }
-
-  _takePhoto() {
-
   }
 }
