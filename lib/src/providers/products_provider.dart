@@ -46,4 +46,16 @@ class ProductsProvider {
     return 1;
   }
 
+  Future<bool> editProduct(ProductModel product) async {
+
+    final String urlProducts = '$_urlFirebase/products/${product.id}.json';
+    final response = await http.put(urlProducts, body: productModelToJson(product));
+
+    final decodedData = json.decode(response.body);
+
+    print(decodedData);
+    return true;
+
+  }
+
 }

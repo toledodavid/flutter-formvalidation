@@ -19,6 +19,13 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final ProductModel productArgument = ModalRoute.of(context).settings.arguments;
+
+    if (productArgument != null) {
+      product = productArgument;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Product'),
@@ -127,7 +134,12 @@ class _ProductPageState extends State<ProductPage> {
     print(product.price);
     print(product.available);
 
-    productProvider.createProduct(product);
+    if (product.id == null) {
+      productProvider.createProduct(product);
+    } else {
+      productProvider.editProduct(product);
+    }
+    
 
   }
 }
