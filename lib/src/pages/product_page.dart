@@ -1,4 +1,7 @@
+//import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'package:formvalidation/src/models/product_model.dart';
 import 'package:formvalidation/src/providers/products_provider.dart';
 import 'package:formvalidation/src/utils/utils.dart' as utils;
@@ -20,6 +23,8 @@ class _ProductPageState extends State<ProductPage> {
 
   bool _saving = false;
 
+  PickedFile photo;
+
   @override
   Widget build(BuildContext context) {
 
@@ -36,11 +41,11 @@ class _ProductPageState extends State<ProductPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.photo_size_select_actual),
-            onPressed: () {}
+            onPressed: _selectPhoto
           ),
           IconButton(
             icon: Icon(Icons.camera_alt),
-            onPressed: () {}
+            onPressed: _takePhoto
           )
         ],
       ),
@@ -51,6 +56,7 @@ class _ProductPageState extends State<ProductPage> {
             key: formKey,
             child: Column(
               children: <Widget>[
+                _showImage(),
                 _createProductName(),
                 _createProductPrice(),
                 _createAvailable(),
@@ -162,5 +168,42 @@ class _ProductPageState extends State<ProductPage> {
     );
 
     scaffoldKey.currentState.showSnackBar(snackbar);
+  }
+
+
+  Widget _showImage() {
+    if (product.photoUrl != null) {
+      return Container();
+    } else {
+      return Image(
+        image: AssetImage(photo?.path ?? 'assets/no-image.png'),
+        height: 300.0,
+        fit: BoxFit.cover,
+      );
+    }
+  }
+
+  _selectPhoto() async {
+    final _picker = ImagePicker();
+    final pickedImage = await _picker.getImage(source: ImageSource.gallery);
+    //photo = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+
+    // Catch error when user cancel selection of image
+    try {
+      photo = PickedFile(pickedImage.path);
+    } catch (err) {
+      print('$err');
+    }
+
+    if (photo != null) {
+      // Clear
+      // product.urlImg = null;
+    }
+ 
+    setState(() {});
+  }
+
+  _takePhoto() {
+
   }
 }
