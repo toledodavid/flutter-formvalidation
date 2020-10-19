@@ -131,11 +131,11 @@ class _ProductPageState extends State<ProductPage> {
       textColor: Colors.white,
       label: Text('Save'),
       icon: Icon(Icons.save),
-      onPressed: () => (_saving) ? null : _submit(context), 
+      onPressed: (_saving) ? null : () => _submit(context), 
     );
   }
 
-  void _submit(BuildContext context) {
+  void _submit(BuildContext context) async {
     if (!formKey.currentState.validate()) return;
 
     FocusScope.of(context).unfocus();
@@ -149,6 +149,10 @@ class _ProductPageState extends State<ProductPage> {
     setState(() {
       _saving = true;
     });
+
+    if (photo != null) {
+      product.photoUrl = await productProvider.uploadImage(File(photo.path));
+    }
 
     if (product.id == null) {
       productProvider.createProduct(product);
