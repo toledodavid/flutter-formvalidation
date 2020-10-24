@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:formvalidation/src/bloc/provider.dart';
 
 
-class LoginPage extends StatelessWidget {
+class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +46,7 @@ class LoginPage extends StatelessWidget {
             ),
             child: Column(
               children: <Widget>[
-                Text('Log In', style: TextStyle(fontSize: 20.0)),
+                Text('Create account', style: TextStyle(fontSize: 20.0)),
                 SizedBox(height: 60.0),
                 _createEmailInput(bloc),
                 SizedBox(height: 30.0),
@@ -58,8 +58,8 @@ class LoginPage extends StatelessWidget {
           ),
 
           FlatButton(
-            child: Text('Create account'),
-            onPressed: () => Navigator.pushNamed(context, 'register')
+            child: Text('Have account? Log In'),
+            onPressed: () => Navigator.pop(context)
           ),
           SizedBox(height: 100.0)
 
