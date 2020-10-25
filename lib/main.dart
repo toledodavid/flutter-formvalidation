@@ -5,14 +5,24 @@ import 'package:formvalidation/src/pages/home_page.dart';
 import 'package:formvalidation/src/pages/login_page.dart';
 import 'package:formvalidation/src/pages/product_page.dart';
 import 'package:formvalidation/src/pages/register_page.dart';
+import 'package:formvalidation/src/user_preferences/user_preferences.dart';
 
-void main() {
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = new UserPreferences();
+  await prefs.initPrefs();
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final prefs = new UserPreferences();
+    print(prefs.token);
+
     return Provider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
