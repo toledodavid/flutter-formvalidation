@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:formvalidation/src/bloc/provider.dart';
 import 'package:formvalidation/src/models/product_model.dart';
-import 'package:formvalidation/src/providers/products_provider.dart';
 
 class HomePage extends StatelessWidget {
-
-  final productsProvider = new ProductsProvider();
 
   @override
   Widget build(BuildContext context) {
 
-    final bloc = Provider.of(context);
+    final productsBloc = Provider.productsBloc(context);
+    productsBloc.getProducts();
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Home page')
       ),
-      body:_createProductsList(),
+      body:_createProductsList(productsBloc),
       floatingActionButton: _createFloatingButton(context),
     );
   }
 
-  Widget _createProductsList() {
-    return FutureBuilder(
-      future: productsProvider.getProducts(),
+  Widget _createProductsList(ProductsBloc productsBloc) {
+    return StreamBuilder(
+      stream: productsBloc.productsStream,
       builder: (BuildContext context, AsyncSnapshot<List<ProductModel>> snapshot) {
         if (snapshot.hasData) {
 
@@ -31,7 +29,7 @@ class HomePage extends StatelessWidget {
 
           return ListView.builder(
             itemCount: products.length,
-            itemBuilder: (context, index) => _creatItem(context, products[index])
+            itemBuilder: (context, index) => _creatItem(context, productsBloc, products[index])
           );
         } else {
           return Center(
@@ -42,14 +40,14 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _creatItem(BuildContext context, ProductModel product) {
+  Widget _creatItem(BuildContext context, ProductsBloc productsBloc, ProductModel product) {
     return Dismissible(
       key: UniqueKey(),
-      background: Container(
+      background: Container( 
         color: Colors.red,
       ),
       onDismissed: (direction) {
-        productsProvider.deleteProduct(product.id);
+        productsBloc.deleteProduct(product.id);
       },
       child: Card(
         child: Column(
