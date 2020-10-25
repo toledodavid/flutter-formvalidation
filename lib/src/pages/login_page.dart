@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:formvalidation/src/bloc/provider.dart';
 import 'package:formvalidation/src/providers/user_provider.dart';
+import 'package:formvalidation/src/utils/utils.dart';
 
 
 class LoginPage extends StatelessWidget {
@@ -148,14 +149,19 @@ class LoginPage extends StatelessWidget {
 
   }
 
-  _login(BuildContext context, LoginBloc bloc) {
+  _login(BuildContext context, LoginBloc bloc) async {
     // print('==================================================');
     // print('Email: ${bloc.email}');
     // print('Password: ${bloc.password}');
     // print('==================================================');
-    // Navigator.pushReplacementNamed(context, 'home');
 
-    userProvider.login(bloc.email, bloc.password);
+    final Map<String, dynamic> info = await userProvider.login(bloc.email, bloc.password);
+
+    if (info['ok']) {
+      Navigator.pushReplacementNamed(context, 'home');
+    } else {
+      showAlertDialog(context, info['message']);
+    }
   }
 
 
