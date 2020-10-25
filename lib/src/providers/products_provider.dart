@@ -3,16 +3,18 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
+import 'package:formvalidation/src/user_preferences/user_preferences.dart';
 
 import 'package:formvalidation/src/models/product_model.dart';
 
 class ProductsProvider {
 
   final String _urlFirebase = 'https://flutter-course-1b8ea.firebaseio.com';
+  final _userPreferences = new UserPreferences();
 
   Future<bool> createProduct(ProductModel product) async {
 
-    final String urlProducts = '$_urlFirebase/products.json';
+    final String urlProducts = '$_urlFirebase/products.json?auth=${_userPreferences.token}';
 
     final response = await http.post(urlProducts, body: productModelToJson(product));
 
@@ -25,7 +27,7 @@ class ProductsProvider {
   }
 
   Future<List<ProductModel>> getProducts() async {
-    final String urlProducts = '$_urlFirebase/products.json';
+    final String urlProducts = '$_urlFirebase/products.json?auth=${_userPreferences.token}';
     final response = await http.get(urlProducts);
 
     final Map<String, dynamic> decodedData = json.decode(response.body);
@@ -43,7 +45,7 @@ class ProductsProvider {
   }
 
   Future<int> deleteProduct(String id) async {
-    final String urlProduct = '$_urlFirebase/products/$id.json';
+    final String urlProduct = '$_urlFirebase/products/$id.json?auth=${_userPreferences.token}';
     final response = await http.delete(urlProduct);
 
     print(response.body);
@@ -52,7 +54,7 @@ class ProductsProvider {
 
   Future<bool> editProduct(ProductModel product) async {
 
-    final String urlProducts = '$_urlFirebase/products/${product.id}.json';
+    final String urlProducts = '$_urlFirebase/products/${product.id}.json?auth=${_userPreferences.token}';
     final response = await http.put(urlProducts, body: productModelToJson(product));
 
     final decodedData = json.decode(response.body);
